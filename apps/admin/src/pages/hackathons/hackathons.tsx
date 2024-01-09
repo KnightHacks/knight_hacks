@@ -21,16 +21,11 @@ const insertHackathonFormSchema = insertHackathonSchema.omit({ id: true });
 
 type InsertHackathonFormValues = z.infer<typeof insertHackathonFormSchema>;
 
-function createHackathon() {
-  // Alternative way to mutate (for learning purposes)
-  // const hackathonRes1 = trpc.hackathons.createHackathon.useMutation().mutate({name: "bro", startDate: "bro", endDate: "bro"})
-}
-
 export function AddHackathonForm() {
   const utils = trpc.useUtils();
   const { mutate, isLoading } = trpc.hackathons.createHackathon.useMutation({
     onSuccess: async () => {
-      await utils.hackathons.getCurrentHackathon.invalidate();
+      await utils.hackathons.getAll.invalidate();
       toast("Success!", { description: "Hackathon added" });
     },
   });

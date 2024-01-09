@@ -1,5 +1,4 @@
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import type { User } from "lucide-react";
 import { useState } from "react";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
@@ -78,8 +77,6 @@ function Actions({ row }: { row: Row<Hackathon> }) {
   const hackathon = row.original;
 
   const [updateUserFormSheetOpen, setUpdateUserFormSheetOpen] = useState(false);
-  const [userProfileFormSheetOpen, setUserProfileFormSheetOpen] =
-    useState(false);
 
   const utils = trpc.useUtils();
   const { mutate } = trpc.hackathons.deleteHackathon.useMutation({
