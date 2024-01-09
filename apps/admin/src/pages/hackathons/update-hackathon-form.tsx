@@ -23,20 +23,22 @@ type Hackathon = RouterOutput["hackathons"]["getAll"][number];
 
 const updateHackathonFormSchema = insertHackathonSchema.omit({ id: true });
 
-type UpdateUserFormValues = z.infer<typeof updateHackathonFormSchema>;
+type UpdateHackathonFormValues = z.infer<typeof updateHackathonFormSchema>;
 
 export function UpdateHackathonForm({ hackathon }: { hackathon: Hackathon }) {
   const utils = trpc.useUtils();
 
-  const form = useForm<UpdateUserFormValues>({
+  const form = useForm<UpdateHackathonFormValues>({
     resolver: zodResolver(updateHackathonFormSchema),
     defaultValues: {
-      name: "Hackathon Name",
+      name: hackathon.name,
+      startDate: hackathon.startDate,
+      endDate: hackathon.endDate,
     },
   });
   const { mutate, isLoading } = trpc.hackathons.updateHackathon.useMutation({
     onSuccess: async () => {
-      await utils.users.getAll.invalidate();
+      await utils.hackathons.getAll.invalidate();
       toast("Success!", {
         description: "Hackathon updated",
       });
@@ -48,7 +50,7 @@ export function UpdateHackathonForm({ hackathon }: { hackathon: Hackathon }) {
     },
   });
 
-  const onSubmit: SubmitHandler<UpdateUserFormValues> = (values) => {
+  const onSubmit: SubmitHandler<UpdateHackathonFormValues> = (values) => {
     mutate({
       id: hackathon.id,
       ...values,
@@ -68,7 +70,7 @@ export function UpdateHackathonForm({ hackathon }: { hackathon: Hackathon }) {
             <FormItem>
               <FormLabel>Hackathon Name</FormLabel>
               <FormControl>
-                <Input placeholder="First Name" {...field} />
+                <Input placeholder="Hackathon Name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

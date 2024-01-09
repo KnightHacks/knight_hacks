@@ -22,7 +22,7 @@ export const hackathonsRouter = router({
   }),
 
   getAll: adminProcedure.query(async ({ ctx }) => {
-    const getHackathons = ctx.db.query.hackathons.findMany();
+    const getHackathons = await ctx.db.query.hackathons.findMany();
 
     return getHackathons ?? null
   }),
@@ -35,7 +35,7 @@ export const hackathonsRouter = router({
 
   updateHackathon: adminProcedure.input(insertHackathonSchema).mutation(async ({ctx, input}) => {
     await ctx.db.transaction(async (db) => {
-      return await db.update(hackathons).set(input).where(eq(hackathons.name, input.name))
+      return await db.update(hackathons).set(input).where(eq(hackathons.id, Number(input.id)))
     })
   })
 });
